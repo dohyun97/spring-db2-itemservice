@@ -9,30 +9,34 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+//@Commit  //rollback대신 commit으로 하고 싶으면 이거 추가
+@Transactional  //이거 하나만 있으면 트렌젝션 실행. 트랜젝션 관련 코드 필요 없어
 @SpringBootTest
 class ItemRepositoryTest {
 
     @Autowired
     ItemRepository itemRepository;
 
-    @Autowired
-    PlatformTransactionManager transactionManager; //transaction manager
+//    @Autowired
+//    PlatformTransactionManager transactionManager; //transaction manager
+//
+//    TransactionStatus status;
 
-    TransactionStatus status;
-
-    @BeforeEach
-    void init(){
-        //start transaction
-        status = transactionManager.getTransaction(new DefaultTransactionDefinition());
-    }
+//    @BeforeEach
+//    void init(){
+//        //start transaction
+//        status = transactionManager.getTransaction(new DefaultTransactionDefinition());
+//    }
 
     @AfterEach
     void afterEach() {
@@ -41,7 +45,7 @@ class ItemRepositoryTest {
             ((MemoryItemRepository) itemRepository).clearStore();
         }
         //rollback
-        transactionManager.rollback(status);
+        //transactionManager.rollback(status);
     }
 
     @Test
